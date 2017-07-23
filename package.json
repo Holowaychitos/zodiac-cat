@@ -1,0 +1,19 @@
+{
+  "name": "zodiacat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "watch": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.2.1",
+    "node-fetch": "^1.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

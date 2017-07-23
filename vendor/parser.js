@@ -1,7 +1,7 @@
 const sendRequest = require('./sendRequest')
 const zodiaco = require('../FSM/zodiaco')
 const messenger = require('./messenger')
-
+const utils = require('./utils')
 
 module.exports = function parser (obj) {
   obj.entry.map(({messaging}) => {
@@ -25,11 +25,16 @@ async function postbacks (sender, payload) {
   console.log("inside postback!!! =>", payload)
   if (payload.state in zodiaco) {
     let state = zodiaco[payload.state]
+    if(state.waitInputFunction){
+
+      let response = utils[state.waitInputFunction]
+      console.log("response =>", response)
+    }
     console.log("state =>", state)
     for (var i = 0; i < state.messages.length; i++) {
       let ops = state.messages.length - 1 === i ? state.options : undefined
-      let quickReplies = messenger.generateQuickReplies(sender, state.messages[i], ops)
-      await sendRequest(quickReplies)
+      let data = messenger.generateData(sender, state.messages[i], ops)
+      await sendRequest(data)
     }
   }
 }

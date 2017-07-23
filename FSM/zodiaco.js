@@ -13,9 +13,9 @@ module.exports = {
 
   'capture_zodiac': {
     messages: [
-      'Ingresa tu signo sodiacal ejemplo ✍️: leo'
+      'Ingresa tu signo zodiacal ejemplo: piscis, cancer, etc.'
     ],
-    input: 'isZodiac',
+    waitInputFunction: 'inputZodiac',
     options: []
   },
 
@@ -23,7 +23,7 @@ module.exports = {
     messages: [
       'Ingresa tu fecha de nacimiento ejemplo ✍️: dia/mes/año'
     ],
-    input: 'isDate',
+    waitInputFunction: 'inputDateZodiac',
     options: []
   }
 }

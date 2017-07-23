@@ -1,5 +1,5 @@
 let messenger = {
-  generateQuickReplies: function (sender, text, replies = []) {
+  generateData: function (sender, text, replies = []) {
     let obj = {
       'recipient': {
         'id': sender

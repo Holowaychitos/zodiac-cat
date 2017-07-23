@@ -25,9 +25,14 @@ async function postbacks (sender, payload) {
   console.log("inside postback!!! =>", payload)
   if (payload.state in zodiaco) {
     let state = zodiaco[payload.state]
-    if(state.waitInputFunction){
 
-      let response = utils[state.waitInputFunction]
+    if('action' in state){
+      console.log("si tiene accion")
+      await utils[state.action].call(null, sender, payload.state)
+    }
+
+    if('waitInputFunction' in state){
+      let response = utils[state.waitInputFunction].call()
       console.log("response =>", response)
     }
     console.log("state =>", state)

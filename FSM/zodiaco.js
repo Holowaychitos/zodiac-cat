@@ -5,6 +5,7 @@ module.exports = {
       'Bienvenido gatuno !!!',
       '¿Conoces tu signo del zodiaco?'
     ],
+    action: 'saveUser',
     options: [
       {text: 'shi 😻', payload: {state: 'capture_zodiac'}},
       {text: 'ño 🙀', payload: {state: 'guess_zodiac'}}

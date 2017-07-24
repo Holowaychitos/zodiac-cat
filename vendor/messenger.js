@@ -1,5 +1,6 @@
 let messenger = {
   generateData: function (sender, text, replies = []) {
+    console.log("messenger generating data....")
     let obj = {
       'recipient': {
         'id': sender

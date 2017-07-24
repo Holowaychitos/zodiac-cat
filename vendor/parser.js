@@ -1,45 +1,38 @@
-const sendRequest = require('./sendRequest')
-const zodiaco = require('../FSM/zodiaco')
+const handler = require('../FSM/handler')
 const messenger = require('./messenger')
 const utils = require('./utils')
+const User = require('../models/User')
+
+// check last state for actions or input waits
+// GO to FSM HANDLER
 
 module.exports = function parser (obj) {
+  console.log('obj =>', obj)
   obj.entry.map(({messaging}) => {
-    messaging.map(item => {
-      let sender = item.sender.id
-      if ('postback' in item) {
-        let payload = JSON.parse(item.postback.payload)
-        postbacks(sender, payload)
-      } else if ('message' in item && 'quick_reply' in item.message) {
-        let payload = JSON.parse(item.message.quick_reply.payload)
-        postbacks(sender, payload)
+    messaging.map(async item => {
+      // get user
+      let user = await User.findOne({fbID: item.sender.id})
+
+      if (user) {
+        console.log("user exists!")
+        // check last state
+        let waitFunction = utils.getLastStateWait(user)
+        console.log("waitFUNCTION =>", waitFunction)
+        if (waitFunction) {
+          // if wait function, gets inputs text
+          let inputText = utils.getMessageInput(item)
+          // executes waitFunction
+          console.log('Getting waited text =>', inputText)
+          await utils[waitFunction].call(null, item.sender.id, inputText)
+        } else {
+          // if not wait function, send to FSM HANDLER
+          handler(item)
+        }
       } else {
-        console.warn('message =>', item.message.text)
+        // not user
+        console.log("user not exists")
+        handler(item)
       }
     })
   })
-}
-
-//when is not a message but it has a payload...
-async function postbacks (sender, payload) {
-  console.log("inside postback!!! =>", payload)
-  if (payload.state in zodiaco) {
-    let state = zodiaco[payload.state]
-
-    if('action' in state){
-      console.log("si tiene accion")
-      await utils[state.action].call(null, sender, payload.state)
-    }
-
-    if('waitInputFunction' in state){
-      let response = utils[state.waitInputFunction].call()
-      console.log("response =>", response)
-    }
-    console.log("state =>", state)
-    for (var i = 0; i < state.messages.length; i++) {
-      let ops = state.messages.length - 1 === i ? state.options : undefined
-      let data = messenger.generateData(sender, state.messages[i], ops)
-      await sendRequest(data)
-    }
-  }
 }

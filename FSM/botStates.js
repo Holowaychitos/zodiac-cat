@@ -26,5 +26,13 @@ module.exports = {
     ],
     waitInputFunction: 'inputDateZodiac',
     options: []
+  },
+
+  'confirm_zodiac': {
+    messages: [
+      'Super!!!',
+      'Déjame ver que es lo que sé de tu signo...'
+    ],
+    options: []
   }
 }

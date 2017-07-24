@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 let userSchema = new Schema({
   fbID:  String,
-  lastState: String
+  lastState: String,
+  sign: String
 })
 
 module.exports = mongoose.model('User', userSchema)
